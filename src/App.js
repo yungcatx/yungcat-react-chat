@@ -61,24 +61,22 @@ const styles = theme => ({
   },
   chatLayoutContainer: {
     gridArea: 'chatlayout',
-    gridTemplateRows: '1fr',
+    display: 'grid',
     height: '100%',
     width: '100%',
-    display: 'grid',
     overflow: 'hidden',
-
   },
   message: {
-    display: 'grid',
-    justifySelf: 'right',
-    maxWidth: '70%',
-    minWidth: '10%',
-  },
-  senderIsMe: {
-    display: 'grid',
     justifySelf: 'left',
     maxWidth: '70%',
     minWidth: '10%',
+
+  },
+  senderIsMe: {
+    justifySelf: 'right',
+    maxWidth: '70%',
+    minWidth: '10%',
+
   },
   bottomNavigationContainer: {
     gridArea: 'bottomnavigation',
@@ -100,6 +98,14 @@ const styles = theme => ({
   },
   bottomNav: {
     width: '320px'
+  },
+  messageStyle: {
+    padding: theme.spacing.unit,
+    marginLeft: theme.spacing.unit * 2,
+  },
+  myMessageStyle: {
+    padding: theme.spacing.unit,
+    marginRight: theme.spacing.unit * 2,
   }
 });
 
@@ -115,7 +121,7 @@ class App extends React.Component {
     ));
     const messageLists = messages && messages.map((message, index) => (
       <div key={index} className={(message.sender === 'me' ? classes.senderIsMe : classes.message)}>
-        <Paper>
+        <Paper className={(message.sender === 'me' ? classes.myMessageStyle : classes.messageStyle)}>
           <Typography variant="caption">
             {message.sender}
           </Typography>
@@ -154,9 +160,7 @@ class App extends React.Component {
           </List>
         </div>
         <div className={classes.chatLayoutContainer}>
-          <List>
-            {messageLists}
-          </List>
+          {messageLists}
         </div>
         <div className={classes.bottomNavigationContainer}>
           <BottomNavigation showLabels className={classes.bottomNav}>
