@@ -26,7 +26,12 @@ import {chats, messages} from './mock-data'
 const styles = theme => ({
   grid: {
     display: 'grid',
+    gridTemplateRows: '10% 80% 10%',
     gridTemplateColumns: '320px 1fr',
+    overflow: 'hidden',
+    position: 'fixed',
+    width: '100%',
+    height: '100%',
     gridTemplateAreas: `
                     'header appbar'
                     'chatlist chatlayout'
@@ -45,48 +50,39 @@ const styles = theme => ({
   },
   drawerContainer: {
     gridArea: 'header',
-    height: '100%',
-    width: '320px',
+    position: 'relative'
   },
   appBarContainer: {
     gridArea: 'appbar',
-
+    position: 'static'
   },
   chatsListContainer: {
-    gridArea: 'chatlist',
-    width: '320px',
     height: '100%',
-    overflow: 'scroll',
-    whiteSpace: 'nowrap',
+    gridArea: 'chatlist',
   },
   chatLayoutContainer: {
     gridArea: 'chatlayout',
     display: 'grid',
-    height: '100%',
-    width: '100%',
-    overflow: 'hidden',
+    overflow: 'auto'
   },
   message: {
     justifySelf: 'left',
-    maxWidth: '70%',
+    maxWidth: '60%',
     minWidth: '10%',
 
   },
   senderIsMe: {
     justifySelf: 'right',
-    maxWidth: '70%',
+    maxWidth: '60%',
     minWidth: '10%',
 
   },
   bottomNavigationContainer: {
     gridArea: 'bottomnavigation',
-    position: 'fixed',
-    bottom: 0
+
   },
   inputContainer: {
     gridArea: 'input',
-    position: 'fixed',
-    bottom: 0
   },
   AppBar: {
     width: `calc(100% - 320px)`,
@@ -97,7 +93,7 @@ const styles = theme => ({
     paddingRight: theme.spacing.unit * 3,
   },
   bottomNav: {
-    width: '320px'
+    width: '320px',
   },
   messageStyle: {
     padding: theme.spacing.unit,
@@ -106,7 +102,22 @@ const styles = theme => ({
   myMessageStyle: {
     padding: theme.spacing.unit,
     marginRight: theme.spacing.unit * 2,
-  }
+  },
+  chatsLists: {
+    height: 'calc(100% - 56px)',
+    position: 'relative',
+    overflowY: 'scroll',
+  },
+  input: {
+    padding: theme.spacing.unit * 2,
+  },
+  messageInputWrapper: {
+    position: 'fixed',
+    left: 'auto',
+    right: 0,
+    bottom: 0,
+    width: `calc(100% - 320px)`,
+  },
 });
 
 class App extends React.Component {
@@ -122,6 +133,9 @@ class App extends React.Component {
     const messageLists = messages && messages.map((message, index) => (
       <div key={index} className={(message.sender === 'me' ? classes.senderIsMe : classes.message)}>
         <Paper className={(message.sender === 'me' ? classes.myMessageStyle : classes.messageStyle)}>
+          <Avatar>
+            {message.sender[0]}
+          </Avatar>
           <Typography variant="caption">
             {message.sender}
           </Typography>
@@ -155,7 +169,7 @@ class App extends React.Component {
           </AppBar>
         </div>
         <div className={classes.chatsListContainer}>
-          <List className={classes.chatsList}>
+          <List className={classes.chatsLists}>
             {chatLists}
           </List>
         </div>
@@ -169,7 +183,11 @@ class App extends React.Component {
           </BottomNavigation>
         </div>
         <div className={classes.inputContainer}>
-          input
+          <div className={classes.messageInputWrapper}>
+          <Paper className={classes.input} elevation={6}>
+            <Input fullWidth placeholder="Type your message…"/>
+          </Paper>
+          </div>
         </div>
       </div>
     );
