@@ -9,7 +9,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
-import Button from '@material-ui/core/Button';
+// import Button from '@material-ui/core/Button';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import Paper from '@material-ui/core/Paper';
@@ -17,7 +17,7 @@ import Input from '@material-ui/core/Input';
 
 import RestoreIcon from '@material-ui/icons/Restore';
 import ExploreIcon from '@material-ui/icons/Explore';
-import AddIcon from '@material-ui/icons/Add';
+// import AddIcon from '@material-ui/icons/Add';
 
 import {chats, messages} from './mock-data'
 
@@ -25,9 +25,11 @@ import {chats, messages} from './mock-data'
 const styles = theme => ({
   grid: {
     display: 'grid',
-    gridTemplateRows: '1fr 80% 1fr',
+    gridTemplateRows: 'auto 80vh auto',
     gridTemplateColumns: '1fr',
-    position: 'static',
+    width: '100%',
+    height: '100%',
+    position: 'relative',
     overflow: 'hidden',
     backgroundColor: theme.palette.background.default,
     gridTemplateAreas: `
@@ -41,8 +43,8 @@ const styles = theme => ({
     display: 'grid',
     gridArea: 'header',
     height: '100%',
-    gridTemplateColumns: '320px 1fr',
-    gridTemplateRows: '1fr',
+    gridTemplateColumns: '320px auto',
+    gridTemplateRows: 'auto',
     gridTemplateAreas: `
              'drawerHeader appbar'
     `
@@ -51,8 +53,8 @@ const styles = theme => ({
     display: 'grid',
     gridArea: 'content',
     height: '100%',
-    gridTemplateColumns: '320px 1fr',
-    gridTemplateRows: '1fr',
+    gridTemplateColumns: '320px auto',
+    gridTemplateRows: 'auto',
     gridTemplateAreas: `
             'chatlist chatlayout'
     `
@@ -60,9 +62,9 @@ const styles = theme => ({
   footerContainer: {
     display: 'grid',
     gridArea: 'footer',
-    height: '100%',
-    gridTemplateColumns: '320px 1fr',
-    gridTemplateRows: '1fr',
+    width: 'calc(100%-320px)',
+    gridTemplateColumns: '320px auto',
+    gridTemplateRows: 'auto',
     gridTemplateAreas: `
             'bottomnavigation input'
     `
@@ -81,7 +83,10 @@ const styles = theme => ({
   chatLayoutContainer: {
     gridArea: 'chatlayout',
     display: 'grid',
-    gridRowGap: '10px'
+    paddingTop: '10px',
+    paddingBottom: '10px',
+    gridGap: '10px',
+    overflow: 'auto'
   },
   addButtonContainer: {
     gridArea: 'addbutton',
@@ -92,7 +97,6 @@ const styles = theme => ({
   },
   bottomNavigationContainer: {
     gridArea: 'bottomnavigation',
-
   },
   addButton: {
     justifySelf: 'right',
@@ -134,8 +138,9 @@ const styles = theme => ({
   },
   input: {
     padding: theme.spacing.unit * 2,
-
+    width: '100%'
   },
+
   messageInputWrapper: {
     width: `100%`,
   },
@@ -198,7 +203,9 @@ class App extends React.Component {
             </List>
           </div>
           <div className={classes.chatLayoutContainer}>
+
             {messageLists}
+
           </div>
           {/*<div className={classes.addButtonContainer}>*/}
           {/*<Button variant="fab" color="primary" aria-label="Add" className={classes.addButton}>*/}
