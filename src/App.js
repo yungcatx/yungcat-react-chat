@@ -1,6 +1,5 @@
 import React from 'react';
 import {withStyles} from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -26,35 +25,43 @@ import {chats, messages} from './mock-data'
 const styles = theme => ({
   grid: {
     display: 'grid',
-    gridTemplateRows: '10% 80% 10%',
-    gridTemplateColumns: '320px 1fr',
+    gridTemplateRows: '6% 94%',
+    gridTemplateColumns: '1fr',
+    position: 'relative',
     overflow: 'hidden',
-    position: 'fixed',
     width: '100%',
     height: '100%',
-    gridTemplateAreas: `
-                    'header appbar'
-                    'chatlist chatlayout'
-                    'bottomnavigation input'
-    `,
     backgroundColor: theme.palette.background.default,
+    gridTemplateAreas: `
+            'header'
+            'content'
+    `,
+  },
 
-    "& div:nth-child(even)": {
-      // backgroundColor: "red",
-    },
-    "& div:nth-child(odd)": {
-      // backgroundColor: "green",
-    },
-
-
+  headerContainer: {
+    display: 'grid',
+    gridArea: 'header',
+    gridTemplateColumns: '320px 1fr',
+    gridTemplateAreas: `
+             'drawerHeader appbar'
+    `
+  },
+  contentContainer: {
+    display: 'grid',
+    gridArea: 'content',
+    gridTemplateColumns: '320px 1fr',
+    gridTemplateRows: '80% 10% 10%',
+    gridTemplateAreas: `
+            'chatlist chatlayout'
+            'addbutton chatlayout'
+            'bottomnavigation input'
+    `
   },
   drawerContainer: {
-    gridArea: 'header',
-    position: 'relative'
+    gridArea: 'drawerHeader',
   },
   appBarContainer: {
     gridArea: 'appbar',
-    position: 'static'
   },
   chatsListContainer: {
     height: '100%',
@@ -63,7 +70,23 @@ const styles = theme => ({
   chatLayoutContainer: {
     gridArea: 'chatlayout',
     display: 'grid',
-    overflow: 'auto'
+    overflow: 'auto',
+    gridRowGap: '10px'
+  },
+  addButtonContainer: {
+    gridArea: 'addbutton',
+    display: 'grid',
+  },
+  inputContainer: {
+    gridArea: 'input',
+  },
+  bottomNavigationContainer: {
+    gridArea: 'bottomnavigation',
+
+  },
+  addButton: {
+    justifySelf: 'right',
+    margin: theme.spacing.unit,
   },
   message: {
     justifySelf: 'left',
@@ -77,14 +100,7 @@ const styles = theme => ({
     minWidth: '10%',
 
   },
-  bottomNavigationContainer: {
-    gridArea: 'bottomnavigation',
-
-  },
-  inputContainer: {
-    gridArea: 'input',
-  },
-  AppBar: {
+  appBar: {
     width: `calc(100% - 320px)`,
   },
   drawerHeader: {
@@ -94,6 +110,8 @@ const styles = theme => ({
   },
   bottomNav: {
     width: '320px',
+    position: 'fixed',
+    bottom: 0
   },
   messageStyle: {
     padding: theme.spacing.unit,
@@ -104,7 +122,7 @@ const styles = theme => ({
     marginRight: theme.spacing.unit * 2,
   },
   chatsLists: {
-    height: 'calc(100% - 56px)',
+    height: '100%',
     position: 'relative',
     overflowY: 'scroll',
   },
@@ -117,6 +135,7 @@ const styles = theme => ({
     right: 0,
     bottom: 0,
     width: `calc(100% - 320px)`,
+
   },
 });
 
@@ -133,9 +152,7 @@ class App extends React.Component {
     const messageLists = messages && messages.map((message, index) => (
       <div key={index} className={(message.sender === 'me' ? classes.senderIsMe : classes.message)}>
         <Paper className={(message.sender === 'me' ? classes.myMessageStyle : classes.messageStyle)}>
-          <Avatar>
-            {message.sender[0]}
-          </Avatar>
+          <Avatar>{message.sender && message.sender[0]}</Avatar>
           <Typography variant="caption">
             {message.sender}
           </Typography>
@@ -148,45 +165,55 @@ class App extends React.Component {
 
     return (
       <div className={classes.grid}>
-        <div className={classes.drawerContainer}>
-          <div className={classes.drawerHeader}>
-            <TextField
-              fullWidth
-              margin="normal"
-              placeholder="Search chats..."
-            />
+        <div className={classes.headerContainer}>
+          <div className={classes.drawerContainer}>
+            <div className={classes.drawerHeader}>
+              <TextField
+                fullWidth
+                margin="normal"
+                placeholder="Search chats..."
+              />
+            </div>
+            <Divider/>
           </div>
-          <Divider/>
+          <div className={classes.appBarContainer}>
+            <AppBar
+              position="absolute" className={classes.appBar}>
+              <Toolbar>
+                <Typography variant="title" color="inherit" noWrap>
+                  Yungcat React Chat
+                </Typography>
+              </Toolbar>
+            </AppBar>
+          </div>
         </div>
-        <div className={classes.appBarContainer}>
-          <AppBar
-            position="absolute" className={classes.AppBar}>
-            <Toolbar>
-              <Typography variant="title" color="inherit" noWrap>
-                Yungcat React Chat
-              </Typography>
-            </Toolbar>
-          </AppBar>
-        </div>
-        <div className={classes.chatsListContainer}>
-          <List className={classes.chatsLists}>
-            {chatLists}
-          </List>
-        </div>
-        <div className={classes.chatLayoutContainer}>
-          {messageLists}
-        </div>
-        <div className={classes.bottomNavigationContainer}>
-          <BottomNavigation showLabels className={classes.bottomNav}>
-            <BottomNavigationAction label="My Chats" icon={<RestoreIcon/>}/>
-            <BottomNavigationAction label="Explore" icon={<ExploreIcon/>}/>
-          </BottomNavigation>
-        </div>
-        <div className={classes.inputContainer}>
-          <div className={classes.messageInputWrapper}>
-          <Paper className={classes.input} elevation={6}>
-            <Input fullWidth placeholder="Type your message…"/>
-          </Paper>
+        <div className={classes.contentContainer}>
+          <div className={classes.chatsListContainer}>
+            <List className={classes.chatsLists}>
+              {chatLists}
+            </List>
+          </div>
+          <div className={classes.chatLayoutContainer}>
+            {messageLists}
+          </div>
+          <div className={classes.addButtonContainer}>
+            <Button variant="fab" color="primary" aria-label="Add" className={classes.addButton}>
+              <AddIcon/>
+            </Button>
+
+          </div>
+          <div className={classes.bottomNavigationContainer}>
+            <BottomNavigation showLabels className={classes.bottomNav}>
+              <BottomNavigationAction label="My Chats" icon={<RestoreIcon/>}/>
+              <BottomNavigationAction label="Explore" icon={<ExploreIcon/>}/>
+            </BottomNavigation>
+          </div>
+          <div className={classes.inputContainer}>
+            <div className={classes.messageInputWrapper}>
+              <Paper className={classes.input} elevation={6}>
+                <Input fullWidth placeholder="Type your message…"/>
+              </Paper>
+            </div>
           </div>
         </div>
       </div>
