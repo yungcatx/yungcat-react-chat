@@ -9,7 +9,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Avatar from "@material-ui/core/Avatar";
 import Divider from "@material-ui/core/Divider";
 import List from "@material-ui/core/List";
-// import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
 import BottomNavigation from "@material-ui/core/BottomNavigation";
 import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
 import Paper from "@material-ui/core/Paper";
@@ -17,7 +17,7 @@ import Input from "@material-ui/core/Input";
 
 import RestoreIcon from "@material-ui/icons/Restore";
 import ExploreIcon from "@material-ui/icons/Explore";
-// import AddIcon from '@material-ui/icons/Add';
+import AddIcon from '@material-ui/icons/Add';
 
 import { chats, messages } from "./mock-data";
 
@@ -45,7 +45,7 @@ const styles = theme => ({
     gridTemplateColumns: "320px auto",
     gridTemplateRows: "auto",
     gridTemplateAreas: `
-             'drawerHeader appbar'
+             'drawerHeader button appbar'
     `
   },
   contentContainer: {
@@ -68,7 +68,7 @@ const styles = theme => ({
     `
   },
   drawerContainer: {
-    gridArea: "drawerHeader"
+    gridArea: "drawerHeader",
   },
   appBarContainer: {
     gridArea: "appbar"
@@ -82,12 +82,8 @@ const styles = theme => ({
     display: "grid",
     paddingTop: "10px",
     paddingBottom: "10px",
-    gridGap: "10px",
+    gridGap: '10px',
     overflow: "auto"
-  },
-  addButtonContainer: {
-    gridArea: "addbutton",
-    display: "grid"
   },
   inputContainer: {
     gridArea: "input"
@@ -96,27 +92,35 @@ const styles = theme => ({
     gridArea: "bottomnavigation"
 
   },
-  addButton: {
-    justifySelf: "right",
-    margin: theme.spacing.unit
-  },
   message: {
     justifySelf: "left",
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
     maxWidth: "60%",
     minWidth: "10%"
   },
   senderIsMe: {
     justifySelf: "right",
+    display: 'flex',
+    flexDirection: 'row-reverse',
+    alignItems: 'center',
     maxWidth: "60%",
     minWidth: "10%"
+  },
+  button: {
+    margin: theme.spacing.unit,
   },
   appBar: {
     width: `calc(100% - 320px)`
   },
   drawerHeader: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     ...theme.mixins.toolbar,
     paddingLeft: theme.spacing.unit * 3,
-    paddingRight: theme.spacing.unit * 3
+
   },
   bottomNav: {
     height: '100%',
@@ -160,6 +164,7 @@ class App extends React.Component {
             message.sender === "me" ? classes.senderIsMe : classes.message
           }
         >
+          <Avatar className={classes.avatarStyle}>{message.sender && message.sender[0]}</Avatar>
           <Paper
             className={
               message.sender === "me"
@@ -167,7 +172,6 @@ class App extends React.Component {
                 : classes.messageStyle
             }
           >
-            <Avatar>{message.sender && message.sender[0]}</Avatar>
             <Typography variant="caption">{message.sender}</Typography>
             <Typography variant="body1">{message.content}</Typography>
           </Paper>
@@ -175,6 +179,7 @@ class App extends React.Component {
       ));
 
     return (
+
       <div className={classes.grid}>
         <div className={classes.headerContainer}>
           <div className={classes.drawerContainer}>
@@ -184,6 +189,11 @@ class App extends React.Component {
                 margin="normal"
                 placeholder="Search chats..."
               />
+              <div className={classes.buttonContainer}>
+                <IconButton color="primary" className={classes.button} aria-label="Add to shopping cart">
+                  <AddIcon />
+                </IconButton>
+              </div>
             </div>
             <Divider />
           </div>
