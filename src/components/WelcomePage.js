@@ -1,13 +1,9 @@
 import React from 'react';
 import {withStyles} from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Icon from '@material-ui/core/Icon'
-import blueGrey from 'material-ui/colors/blueGrey';
-
-
-import ChatIcon from '@material-ui/icons/Chat';
+import {Link} from 'react-router-dom';
+import Button from '@material-ui/core/Button';
+import Emoji from 'react-emoji-render';
+import SimpleHeader from './SimpleHeader'
 
 
 const styles = theme => ({
@@ -38,14 +34,44 @@ const styles = theme => ({
     alignItems: 'center',
     alignContent: 'space-between',
   },
+  welcomeTextStyle: {
+
+  },
   content: {
     display: 'grid',
     gridArea: 'content',
+    gridTemplateRows: '30vh 1fr auto',
+    gridTemplateColumns: '1fr 1fr 1fr',
+    gridTemplateAreas: `
+           ' . . . '
+        ' . welcome . '
+           ' . . . '
+    `,
+  },
+  welcomeContainer: {
+    gridArea: 'welcome',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+
   },
   footer: {
     display: 'grid',
     gridArea: 'footer',
-  }
+    gridTemplateRows: '1fr',
+    gridTemplateColumns: '1fr 1fr 1fr',
+    gridTemplateAreas: `
+        '. button . '
+    `,
+  },
+  button: {
+    margin: theme.spacing.unit,
+  },
+  buttonContainer: {
+    gridArea: 'button',
+    alignContent: 'center',
+    justifySelf: 'center'
+  },
 });
 
 class WelcomePage extends React.Component {
@@ -55,25 +81,24 @@ class WelcomePage extends React.Component {
     return(
       <div className={classes.grid}>
         <div className={classes.header}>
-          <AppBar position="static" color="primary" className={classes.headerLayout}>
-            <Icon>
-              <ChatIcon />
-            </Icon>
-            <Toolbar>
-              <Typography variant="title" color="inherit">
-                Yungcat React Chat
-              </Typography>
-            </Toolbar>
-          </AppBar>
+          <SimpleHeader />
         </div>
         <div className={classes.content}>
-          <div>
-            <h1>Welcome!</h1>
+          <div className={classes.welcomeContainer}>
+            <h1>Welcome <Emoji text="🎉"/></h1>
+            <h3>React Chat is the fast chat</h3>
           </div>
         </div>
         <div className={classes.footer}>
-          <div>
-
+          <div className={classes.buttonContainer}>
+            <Button variant="contained"
+                    color="primary"
+                    className={classes.button}
+                    size="large"
+                    component={Link}
+            to="/register">
+              Explore
+            </Button>
           </div>
         </div>
       </div>

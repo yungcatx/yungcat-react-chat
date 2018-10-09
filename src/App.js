@@ -3,6 +3,8 @@ import { withStyles } from "@material-ui/core/styles";
 import {BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom'
 import MainPage from './components/MainPage'
 import WelcomePage from './components/WelcomePage'
+import SignUpPage from './components/SignUpPage'
+import SignInPage from './components/SignInPage'
 
 const styles = theme => ({
   //
@@ -14,7 +16,9 @@ class App extends React.Component {
       <Router>
         <Switch>
           <Route exact path="/" component={WelcomePage}/>
-          <Route path="/chat" component={MainPage} />
+          <Route exact path="/chat" component={MainPage} />
+          <Route exact path="/register" component={SignUpPage}/>
+          <Route exact path="/login" component={SignInPage}/>
           <Redirect to="/"/>
         </Switch>
       </Router>
