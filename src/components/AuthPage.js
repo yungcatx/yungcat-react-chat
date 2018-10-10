@@ -2,7 +2,8 @@ import React from "react";
 import {withStyles} from '@material-ui/core/styles';
 
 import SimpleHeader from './SimpleHeader'
-import SwipeableAppBar from './SwipeableAppBar'
+import RegisterForm from './RegisterForm'
+import LoginForm from './LoginForm'
 
 
 const styles = theme => ({
@@ -10,35 +11,49 @@ const styles = theme => ({
     display: 'grid',
     width: '100%',
     height: '100%',
+    position: 'relative',
     overflow: 'hidden',
     gridTemplateColumns: '1fr',
-    gridTemplateRows: "20% 80%",
+    gridTemplateRows: "auto 87vh",
     gridTemplateAreas: `
             'header'
             'content'
     `,
   },
   header: {
-    display: 'grid',
     gridArea: 'header'
   },
   content: {
     display: 'grid',
     gridArea: 'content',
     gridTemplateColumns: '1fr 1fr 1fr',
-    gridTemplateRows: '1fr 1fr 1fr',
+    gridTemplateRows: '1fr 100vh 1fr',
     gridTemplateAreas: `
             '. . .'
-          '. form .'
+            '. form .'
             '. . .'
     `,
 
   },
   formContainer: {
     gridArea: 'form',
-    alignSelf: 'center',
-    alignContent: 'center'
+    display: 'grid',
+    gridGap: '200px',
+    gridTemplateRows: '1fr',
+    gridTemplateColumns: 'auto 320px auto 320px auto',
+    gridTemplateAreas: `
+             '. signup . signin .'
+    `,
   },
+  signUpFormContainer: {
+    gridArea: 'signup',
+    alignSelf: 'center',
+  },
+  signInFormContainer: {
+    gridArea: 'signin',
+    alignSelf: 'center'
+  },
+
 });
 
 
@@ -52,7 +67,15 @@ class AuthPage extends React.Component {
         </div>
         <div className={classes.content}>
           <div className={classes.formContainer}>
-            <SwipeableAppBar />
+            <div className={classes.signUpFormContainer}>
+              <RegisterForm />
+            </div>
+            <div className={classes.headerDivider}>
+
+            </div>
+            <div className={classes.signInFormContainer}>
+              <LoginForm />
+            </div>
           </div>
         </div>
       </div>

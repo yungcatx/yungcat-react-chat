@@ -96,7 +96,7 @@ class WelcomePage extends React.Component {
                     className={classes.button}
                     size="large"
                     component={Link}
-            to="/register">
+            to="/auth">
               Explore
             </Button>
           </div>
