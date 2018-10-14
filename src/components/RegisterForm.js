@@ -77,7 +77,7 @@ class RegisterForm extends React.Component {
 
     console.log('Register', username.value, password.value)
 
-    //..
+    this.props.onSubmit(username.value, password.value);
   };
 
   render() {

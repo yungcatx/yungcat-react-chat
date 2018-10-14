@@ -54,8 +54,8 @@ class LoginForm extends React.Component {
     event.preventDefault();
 
     const {username, password} = this.state;
-    console.log('Login', username.value, password.value)
-    //...
+
+    this.props.onSubmit(username.value, password.value)
   };
 
   render() {

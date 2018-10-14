@@ -1,5 +1,6 @@
 import React from "react";
 import {withStyles} from '@material-ui/core/styles';
+import {Redirect} from 'react-router-dom';
 
 import SimpleHeader from './SimpleHeader'
 import RegisterForm from './RegisterForm'
@@ -59,7 +60,13 @@ const styles = theme => ({
 
 class AuthPage extends React.Component {
   render() {
-    const {classes} = this.props;
+    const {classes, signUp, login, isAuthenticated} = this.props;
+    if (isAuthenticated) {
+      return (
+        <Redirect to="/chat" />
+      );
+    }
+
     return (
       <div className={classes.grid}>
         <div className={classes.header}>
@@ -68,13 +75,13 @@ class AuthPage extends React.Component {
         <div className={classes.content}>
           <div className={classes.formContainer}>
             <div className={classes.signUpFormContainer}>
-              <RegisterForm />
+              <RegisterForm onSubmit={signUp}/>
             </div>
-            <div className={classes.headerDivider}>
+            <div>
 
             </div>
             <div className={classes.signInFormContainer}>
-              <LoginForm />
+              <LoginForm onSubmit={login} />
             </div>
           </div>
         </div>

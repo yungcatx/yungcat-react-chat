@@ -5,29 +5,6 @@ import {
 } from '../constants'
 import {axios} from 'axios';
 
-
-export function login(username, password) {
-  return (dispatch) => {
-    dispatch({
-      type: LOGIN_REQUEST,
-    });
-
-    return axios.post('http://localhost:8000/v1/login', {
-      username: username,
-      password: password
-    })
-      .then(response => dispatch({
-        type: SIGNUP_SUCCESS,
-        payload: response
-      }))
-      .catch(reason => dispatch({
-        type: SIGNUP_FAILURE,
-        payload: reason
-      }))
-
-  };
-}
-
 export function signUp(username, password) {
   return (dispatch) => {
     dispatch({
@@ -48,7 +25,30 @@ export function signUp(username, password) {
       }))
 
   };
-};
+}
+
+export function login(username, password) {
+  return (dispatch) => {
+    dispatch({
+      type: LOGIN_REQUEST,
+    });
+
+    return axios.post('http://localhost:8000/v1/login', {
+      username: username,
+      password: password
+    })
+      .then(response => dispatch({
+        type: LOGIN_SUCCESS,
+        payload: response
+      }))
+      .catch(reason => dispatch({
+        type: LOGIN_FAILURE,
+        payload: reason
+      }))
+
+  };
+}
+
 
 export function logout() {
   return (dispatch) => {

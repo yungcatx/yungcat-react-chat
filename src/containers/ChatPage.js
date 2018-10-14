@@ -1,5 +1,6 @@
-import {connect} from 'redux';
+import {connect} from 'react-redux';
 import MainPage from '../components/MainPage'
+
 
 const mapStateToProps = state => ({
   //

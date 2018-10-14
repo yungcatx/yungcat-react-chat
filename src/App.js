@@ -2,9 +2,9 @@ import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import {Provider} from 'react-redux';
 import {BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom'
-import MainPage from './components/MainPage'
+import MainPage from './containers/ChatPage'
 import WelcomePage from './components/WelcomePage'
-import AuthPage from './components/AuthPage'
+import AuthPage from './containers/AuthPage'
 import configureStore from './store'
 
 const styles = theme => ({
