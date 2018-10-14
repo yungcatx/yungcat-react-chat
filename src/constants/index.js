@@ -1,6 +1,6 @@
-export const SIGNUP_REQUEST = Symbol('AUTH_REQUEST');
-export const SIGNUP_SUCCESS = Symbol('AUTH_SUCCESS');
-export const SIGNUP_FAILURE = Symbol('AUTH_FAILURE');
+export const SIGNUP_REQUEST = Symbol('SIGNUP_REQUEST');
+export const SIGNUP_SUCCESS = Symbol('SIGNUP_SUCCESS');
+export const SIGNUP_FAILURE = Symbol('SIGNUP_FAILURE');
 
 export const LOGIN_REQUEST = Symbol('LOGIN_REQUEST');
 export const LOGIN_SUCCESS = Symbol('LOGIN_SUCCESS');
