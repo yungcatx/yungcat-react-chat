@@ -17,8 +17,8 @@ const initialState = {
 export default function auth(state = initialState, action) {
   console.log(action);
   switch (action.type) {
-    case SIGNUP_REQUEST:
-    case LOGIN_REQUEST:
+    case SIGNUP_SUCCESS:
+    case LOGIN_SUCCESS:
       return {
         ...state,
         isAuthenticated: true,
