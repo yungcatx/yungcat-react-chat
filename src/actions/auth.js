@@ -75,7 +75,6 @@ export function login(username, password) {
         if (!json.token) {
           throw new Error('Token has not been provided!');
         }
-        // Save JWT to localStorage
         localStorage.setItem('token', json.token);
         dispatch({
           type: LOGIN_SUCCESS,

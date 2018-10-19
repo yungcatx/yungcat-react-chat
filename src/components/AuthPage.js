@@ -5,6 +5,9 @@ import {Redirect} from 'react-router-dom';
 import SimpleHeader from './SimpleHeader'
 import RegisterForm from './RegisterForm'
 import LoginForm from './LoginForm'
+import {bindActionCreators, compose} from "redux";
+import {login, signUp} from "../actions";
+import connect from "react-redux/es/connect/connect";
 
 
 const styles = theme => ({
@@ -63,14 +66,14 @@ class AuthPage extends React.Component {
     const {classes, signUp, login, isAuthenticated} = this.props;
     if (isAuthenticated) {
       return (
-        <Redirect to="/chat" />
+        <Redirect to="/chat"/>
       );
     }
 
     return (
       <div className={classes.grid}>
         <div className={classes.header}>
-          <SimpleHeader />
+          <SimpleHeader/>
         </div>
         <div className={classes.content}>
           <div className={classes.formContainer}>
@@ -81,7 +84,7 @@ class AuthPage extends React.Component {
 
             </div>
             <div className={classes.signInFormContainer}>
-              <LoginForm onSubmit={login} />
+              <LoginForm onSubmit={login}/>
             </div>
           </div>
         </div>
@@ -90,4 +93,18 @@ class AuthPage extends React.Component {
   }
 }
 
-export default withStyles(styles)(AuthPage)
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated
+});
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+  signUp,
+  login,
+}, dispatch);
+
+export default compose(
+  withStyles(styles),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps)
+  )(AuthPage);

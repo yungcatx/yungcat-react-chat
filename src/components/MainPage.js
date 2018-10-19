@@ -8,6 +8,8 @@ import BottomNav from './BottomNavigation';
 import MessageInput from './MessageInput';
 
 import { chats, messages } from "../mock-data";
+import connect from "react-redux/es/connect/connect";
+import {compose} from "redux";
 
 const styles = theme => ({
   grid: {
@@ -82,4 +84,18 @@ class MainPage extends Component {
   }
 }
 
-export default withStyles(styles)(MainPage);
+const mapStateToProps = state => ({
+  //
+});
+
+
+const mapDispatchToProps = dispatch => ({
+  //
+});
+
+export default compose(
+  withStyles(styles),
+    connect(
+    mapStateToProps,
+    mapDispatchToProps)
+  )(MainPage);

@@ -11,6 +11,7 @@ const styles = theme => ({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+    paddingLeft: theme.spacing.unit,
     maxWidth: "60%",
     minWidth: "10%"
   },
