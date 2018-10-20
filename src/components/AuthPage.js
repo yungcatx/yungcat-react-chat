@@ -6,7 +6,7 @@ import SimpleHeader from './SimpleHeader'
 import RegisterForm from './RegisterForm'
 import LoginForm from './LoginForm'
 import {bindActionCreators, compose} from "redux";
-import {login, signUp} from "../actions";
+import {login, signUp, receiveAuth} from "../actions";
 import connect from "react-redux/es/connect/connect";
 
 
@@ -62,6 +62,10 @@ const styles = theme => ({
 
 
 class AuthPage extends React.Component {
+  componentDidMount() {
+    this.props.receiveAuth()
+  }
+
   render() {
     const {classes, signUp, login, isAuthenticated} = this.props;
     if (isAuthenticated) {
@@ -100,6 +104,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => bindActionCreators({
   signUp,
   login,
+  receiveAuth
 }, dispatch);
 
 export default compose(

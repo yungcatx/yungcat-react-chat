@@ -103,7 +103,7 @@ export function receiveAuth() {
         type: types.RECIEVE_AUTH_FAILURE
       })
     }
-    return fetch('http://localhost:8000/v1/login', {
+    return fetch('http://localhost:8000/v1/users/me', {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Accept': 'application/json',

@@ -14,3 +14,5 @@ export const LOGOUT_FAILURE = Symbol('LOGOUT_FAILURE');
 export const RECIEVE_AUTH_REQUEST = Symbol('RECIEVE_AUTH_REQUEST');
 export const RECIEVE_AUTH_SUCCESS = Symbol('RECIEVE_AUTH_SUCCESS');
 export const RECIEVE_AUTH_FAILURE = Symbol('RECIEVE_AUTH_FAILURE');
+
+export const REDIRECT = Symbol('REDIRECT');
