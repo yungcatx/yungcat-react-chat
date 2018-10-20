@@ -7,9 +7,12 @@ import Chat from './Chat';
 import BottomNav from './BottomNavigation';
 import MessageInput from './MessageInput';
 
-import { chats, messages } from "../mock-data";
+import { messages } from "../mock-data";
 import connect from "react-redux/es/connect/connect";
-import {compose} from "redux";
+import {compose, bindActionCreators} from "redux";
+import {fetchAllChats, fetchMyChats, setActiveChat} from "../actions";
+import * as fromChats from '../reducers/chats';
+
 
 const styles = theme => ({
   grid: {
@@ -60,8 +63,17 @@ const styles = theme => ({
 });
 
 class MainPage extends Component {
+  componentDidMount() {
+    const { fetchAllChats, fetchMyChats} = this.props;
+
+    Promise.all([
+      fetchAllChats(),
+      fetchMyChats(),
+    ]);
+  }
+
   render() {
-    const { classes } = this.props;
+    const { classes, chats} = this.props;
     return (
 
       <div className={classes.grid}>
@@ -85,13 +97,15 @@ class MainPage extends Component {
 }
 
 const mapStateToProps = state => ({
-  //
+  chats: fromChats.getByIds(state.chats, state.chats.allIds)
 });
 
 
-const mapDispatchToProps = dispatch => ({
-  //
-});
+const mapDispatchToProps = dispatch => bindActionCreators({
+  fetchAllChats,
+  fetchMyChats,
+  setActiveChat
+}, dispatch);
 
 export default compose(
   withStyles(styles),
