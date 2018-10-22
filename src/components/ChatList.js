@@ -10,6 +10,9 @@ const styles = theme => ({
     gridArea: "chatlist",
     overflow: "auto"
   },
+  noChats: {
+    textAlign: 'center'
+  }
 });
 
 const ChatList = ({classes, chats, activeChat }) => (

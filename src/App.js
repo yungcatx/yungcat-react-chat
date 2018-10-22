@@ -23,7 +23,7 @@ class App extends React.Component {
       <Router history={history}>
           <Switch>
             <Route exact path="/(welcome)?" component={WelcomePage} />
-            <PrivateRoute exact path="/chat" component={MainPage} />
+            <PrivateRoute exact path="/chat/:chatId?" component={MainPage} />
             <Route exact path="/auth" component={AuthPage} />
             <Redirect to="/" />
           </Switch>

@@ -5,6 +5,10 @@ import DrawerHeader from './DrawerHeader';
 import ChatAppBar from './AppBar';
 import Chat from './Chat';
 import BottomNav from './BottomNavigation';
+import BottomNavigation from '@material-ui/core/BottomNavigation';
+import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
+import RestoreIcon from "@material-ui/icons/Restore";
+import ExploreIcon from "@material-ui/icons/Explore";
 import MessageInput from './MessageInput';
 
 import {messages} from "../mock-data";
@@ -66,17 +70,48 @@ const styles = theme => ({
             'bottomnavigation input'
     `
   },
+
 });
 
 class MainPage extends Component {
-  componentDidMount() {
-    const {fetchAllChats, fetchMyChats, setActiveChat} = this.props;
+  constructor(props) {
+    super(props);
+    this.state = {
+      activeTab: 0
+    }
 
+  }
+
+  componentDidMount() {
+    const {match, fetchAllChats, fetchMyChats, setActiveChat} = this.props;
+    console.log('state', this.state.activeTab)
     Promise.all([
       fetchAllChats(),
       fetchMyChats(),
-    ]);
+    ])
+      .then(() => {
+        if (match.params.chatId) {
+          setActiveChat(match.params.chatId);
+        }
+      })
+
   }
+
+  componentWillReceiveProps(nextProps) {
+    const {match: {params}, setActiveChat} = this.props;
+    const {params: nextParams} = nextProps.match;
+
+    if (nextParams.chatId && params.chatId !== nextParams.chatId) {
+      setActiveChat(nextParams.chatId);
+    }
+  }
+
+  handleTabChange = (event, value) => {
+    this.setState({
+      activeTab: value,
+    })
+  }
+
 
   render() {
     const {
@@ -84,8 +119,9 @@ class MainPage extends Component {
       createChat, joinChat, leaveChat, deleteChat, sendMessage,
       messages, editUser
     } = this.props;
-    return (
 
+
+    return (
       <div className={classes.grid}>
         <div className={classes.headerContainer}>
           <DrawerHeader addChat={createChat}/>
@@ -95,24 +131,39 @@ class MainPage extends Component {
                       activeChat={chats.active}
                       leaveChat={leaveChat}
                       deleteChat={deleteChat}
-                    />
+          />
         </div>
 
         <div className={classes.contentContainer}>
           <ChatList
-            chats={chats}
-          activeChat={chats.active}/>
+            chats={this.state.activeTab === 0 ? chats.my : chats.all}
+            activeChat={chats.active}/>
           <Chat messages={messages}/>
         </div>
 
         <div className={classes.footerContainer}>
-          <BottomNav/>
-          <MessageInput/>
+
+          <BottomNavigation
+            value={this.state.activeTab}
+            onChange={this.handleTabChange}
+            showLabels
+          >
+            <BottomNavigationAction label="My Chats" icon={<RestoreIcon />} />
+            <BottomNavigationAction label="Explore" icon={<ExploreIcon />} />
+          </BottomNavigation>
+
+          {chats.active && <MessageInput
+            sendMessage={(content) => sendMessage(chats.active._id, content)}
+            showJoinButton={!activeUser.isChatMember}
+            onJoinButtonClick={() => joinChat(chats.active._id)}
+            activeUser={activeUser}
+          />}
         </div>
       </div>
     );
   }
 }
+
 
 const mapStateToProps = state => {
   const activeChat = fromChats.getById(state.chats, state.chats.activeId);
