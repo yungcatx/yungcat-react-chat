@@ -3,6 +3,8 @@ import {withStyles} from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
 import Divider from '@material-ui/core/Divider';
+import AddChatButton from './AddChatButton'
+import {compose} from 'redux';
 
 import AddIcon from '@material-ui/icons/Add';
 
@@ -20,7 +22,8 @@ const styles = theme => ({
   },
 });
 
-const DrawerHeader = ({classes}) => (
+const DrawerHeader = ({classes, addChat}) => (
+
   <div className={classes.drawerContainer}>
   <div className={classes.drawerHeader}>
     <TextField
@@ -28,15 +31,11 @@ const DrawerHeader = ({classes}) => (
       margin="normal"
       placeholder="Search chats..."
     />
-    <div>
-      <IconButton color="primary" className={classes.button} aria-label="Add to shopping cart">
-        <AddIcon />
-      </IconButton>
-    </div>
+      <AddChatButton onSubmit={addChat}/>
     <Divider/>
   </div>
   </div>
 
 );
 
-export default withStyles(styles)(DrawerHeader)
+export default compose(withStyles(styles)(DrawerHeader))
