@@ -39,6 +39,11 @@ class AddChatButton extends React.Component {
     const {chat} = this.state;
     console.log(chat.value);
     this.props.onSubmit(chat.value);
+    this.setState({
+      chat: {
+        value: ''
+      }
+    })
   };
 
   handleClickOpen = () => {
@@ -46,6 +51,7 @@ class AddChatButton extends React.Component {
   };
   handleClose = () => {
     this.setState({open: false})
+
   };
 
 

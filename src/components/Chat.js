@@ -1,17 +1,29 @@
 import React, {Component} from 'react';
 import {withStyles} from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
 
 import ChatMessage from './ChatMessage'
 
 const styles = theme => ({
   chatLayoutContainer: {
-    gridArea: "chatlayout",
-    display: "grid",
-    paddingTop: "10px",
-    paddingBottom: "10px",
-    gridGap: '10px',
-    overflow: "auto"
+    overflowX: 'scroll',
+    height: '100%',
+    width: '100%',
+    paddingTop: theme.spacing.unit * 3,
+    paddingBottom: '120px',
   },
+  paperRoot: {
+    ...theme.mixins.gutters(),
+    width: '100%',
+    paddingTop: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing.unit * 2,
+    display: 'grid',
+  },
+  paperLayout: {
+    alignSelf: 'center',
+    justifySelf: 'center'
+  }
 });
 
 class Chat extends Component {
@@ -31,14 +43,38 @@ class Chat extends Component {
   }
 
   render() {
-    const {classes, messages} = this.props;
+    const { classes, messages , activeChat, activeUser} = this.props;
 
-    return (
+
+    if (!activeChat) {
+      return (
+        <div className={classes.paperLayout}>
+          <Paper className={classes.paperRoot} elevation={1}>
+            <Typography variant="h5" component="h3" style={{justifySelf: 'center'}}>
+              To start messaging
+            </Typography>
+            <Typography component="p" style={{justifySelf: 'center'}}>
+              Create a chat or press <strong>"Explore"</strong>
+            </Typography>
+          </Paper>
+        </div>
+      );
+    }
+
+    return messages && messages.length ? (
       <div className={classes.chatLayoutContainer} ref="chatLayout">
-        {messages && messages.map((message, index) =>
-          <ChatMessage key={index} sender={message.sender} content={message.content}/>
-        )}
+        {messages.map((message, index) => (
+          <ChatMessage
+            key={index}
+            activeUser={activeUser}
+            {...message}
+          />
+        ))}
       </div>
+    ) : (
+      <Typography variant="display1" className={classes.paperLayout}>
+        There is no messages yet...
+      </Typography>
     );
   }
 }

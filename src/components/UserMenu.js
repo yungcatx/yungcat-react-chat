@@ -2,9 +2,17 @@ import React from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import {withStyles} from '@material-ui/core/styles'
 
 import EditUserDialog from './EditUserDialog'
-import ProfileIcon from '@material-ui/icons/VerifiedUserRounded'
+import ProfileIcon from '@material-ui/icons/AccountBox'
+
+const styles = theme => ({
+  menuItem: {
+    marginLeft: 'auto'
+  }
+})
+
 
 class SimpleMenu extends React.Component {
   constructor(props) {
@@ -25,14 +33,15 @@ class SimpleMenu extends React.Component {
 
   render() {
     const { anchorEl } = this.state;
-    const {logout, editUser, activeUser} = this.props;
+    const {classes, logout, editUser, activeUser} = this.props;
 
     return (
-      <div>
+      <div className={classes.menuItem}>
         <IconButton
           aria-owns={anchorEl ? 'simple-menu' : null}
           aria-haspopup="true"
           onClick={this.handleClick}
+          color="inherit"
         >
           <ProfileIcon/>
         </IconButton>
@@ -50,4 +59,4 @@ class SimpleMenu extends React.Component {
   }
 }
 
-export default SimpleMenu;
+export default withStyles(styles)(SimpleMenu);

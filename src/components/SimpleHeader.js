@@ -5,7 +5,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Icon from '@material-ui/core/Icon';
 import ChatIcon from '@material-ui/icons/Chat';
-import {Link} from 'react-router-dom';
 
 
 const styles = theme => ({

@@ -1,12 +1,10 @@
 import React from 'react';
 import {withStyles} from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import IconButton from '@material-ui/core/IconButton';
 import Divider from '@material-ui/core/Divider';
 import AddChatButton from './AddChatButton'
 import {compose} from 'redux';
 
-import AddIcon from '@material-ui/icons/Add';
 
 const styles = theme => ({
   drawerContainer: {
@@ -22,20 +20,28 @@ const styles = theme => ({
   },
 });
 
-const DrawerHeader = ({classes, addChat}) => (
+class DrawerHeader extends React.Component {
 
-  <div className={classes.drawerContainer}>
-  <div className={classes.drawerHeader}>
-    <TextField
-      fullWidth
-      margin="normal"
-      placeholder="Search chats..."
-    />
-      <AddChatButton onSubmit={addChat}/>
-    <Divider/>
-  </div>
-  </div>
+  render () {
+    const {classes, addChat, searchValue, handleChange} = this.props;
+    return (
+      <div className={classes.drawerContainer}>
+        <div className={classes.drawerHeader}>
+          <TextField
+            fullWidth
+            margin="normal"
+            placeholder="Search chats..."
+            value={searchValue}
+            onChange={handleChange}
+          />
+          <AddChatButton onSubmit={addChat}/>
+          <Divider/>
+        </div>
+      </div>
+    )
+  };
 
-);
+}
+
 
 export default compose(withStyles(styles)(DrawerHeader))

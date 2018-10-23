@@ -1,5 +1,3 @@
-import AddIcon from '@material-ui/icons/Add';
-import IconButton from "@material-ui/core/IconButton/IconButton";
 import Button from '@material-ui/core/Button';
 import React from "react";
 import TextField from '@material-ui/core/TextField';
@@ -9,11 +7,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import MenuItem from "@material-ui/core/MenuItem/MenuItem";
-import Menu from "@material-ui/core/Menu/Menu";
-
-
-
-
 
 
 class EditUserDialog extends React.Component {
@@ -25,34 +18,15 @@ class EditUserDialog extends React.Component {
       firstName: '',
       lastName: '',
     };
-    const {editUser} = this.props;
   }
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      username: nextProps.activeUser.username,
-      firstName: nextProps.activeUser.firstName,
-      lastName: nextProps.activeUser.lastName,
-    })
-  }
+
   handleInputChange = (event) => {
     this.setState({
       [event.target.name]: event.target.value,
     });
-  };
+  }
   handleSubmit = event => {
     event.preventDefault();
-    const {username, firstName, lastName} = this.state;
-    console.log(this.state);
-
-    this.props.onSubmit(username.value, firstName.value, lastName.value);
-  };
-  handleClickOpen = () => {
-    this.setState({ open: true })
-  };
-  handleClose = () => {
-    this.setState({ open: null });
-  };
-  handleSaveClick = () => {
     this.props.editUser({
       username: this.state.username,
       firstName: this.state.firstName,
@@ -61,10 +35,14 @@ class EditUserDialog extends React.Component {
     this.handleClose();
   };
 
+  handleClickOpen = () => {
+    this.setState({ open: true })
+  };
+  handleClose = () => {
+    this.setState({ open: null });
+  };
 
   render() {
-    const {username, firstName, lastName} = this.state;
-
     return(
       <React.Fragment>
         <MenuItem onClick={this.handleClickOpen}>Profile</MenuItem>
@@ -75,11 +53,11 @@ class EditUserDialog extends React.Component {
         >
           <form onSubmit={this.handleSubmit}>
             <DialogTitle id="form-dialog-title">
-              Add a new chat
+              Edit your profile
             </DialogTitle>
             <DialogContent>
               <DialogContentText>
-                To add a new chat enter the chat title.
+                To edit your profile fill up fields below
               </DialogContentText>
               <TextField
                 required
@@ -114,7 +92,7 @@ class EditUserDialog extends React.Component {
               />
             </DialogContent>
             <DialogActions>
-              <Button color="primary" onClick={this.handleSaveClick}>
+              <Button color="primary" type="submit">
                 Save
               </Button>
               <Button>

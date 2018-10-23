@@ -1,19 +1,14 @@
 import React, {Component} from "react";
 import {withStyles} from "@material-ui/core/styles";
-import ChatList from './ChatList';
-import DrawerHeader from './DrawerHeader';
-import ChatAppBar from './AppBar';
-import Chat from './Chat';
-import BottomNav from './BottomNavigation';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
+
 import RestoreIcon from "@material-ui/icons/Restore";
 import ExploreIcon from "@material-ui/icons/Explore";
-import MessageInput from './MessageInput';
 
-import {messages} from "../mock-data";
 import connect from "react-redux/es/connect/connect";
 import {compose, bindActionCreators} from "redux";
+
 import {
   fetchAllChats, fetchMyChats, setActiveChat,
   logout, createChat, editUser,
@@ -22,6 +17,11 @@ import {
 } from "../actions";
 import * as fromChats from '../reducers/chats';
 import * as fromState from '../reducers';
+import ChatList from './ChatList';
+import DrawerHeader from './DrawerHeader';
+import ChatAppBar from './AppBar';
+import Chat from './Chat';
+import MessageInput from './MessageInput';
 
 
 const styles = theme => ({
@@ -33,7 +33,7 @@ const styles = theme => ({
     height: "100%",
     position: "relative",
     overflow: "hidden",
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: theme.palette.background.orange,
     gridTemplateAreas: `
             'header'
             'content'
@@ -77,11 +77,11 @@ class MainPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeTab: 0
+      activeTab: 0,
+      searchValue: ''
     }
 
-  }
-
+  };
   componentDidMount() {
     const {match, fetchAllChats, fetchMyChats, setActiveChat} = this.props;
     console.log('state', this.state.activeTab)
@@ -94,9 +94,7 @@ class MainPage extends Component {
           setActiveChat(match.params.chatId);
         }
       })
-
-  }
-
+  };
   componentWillReceiveProps(nextProps) {
     const {match: {params}, setActiveChat} = this.props;
     const {params: nextParams} = nextProps.match;
@@ -104,15 +102,29 @@ class MainPage extends Component {
     if (nextParams.chatId && params.chatId !== nextParams.chatId) {
       setActiveChat(nextParams.chatId);
     }
-  }
-
+  };
   handleTabChange = (event, value) => {
     this.setState({
       activeTab: value,
     })
+  };
+  handleSearchChange = (event) => {
+    this.setState({
+      searchValue: event.target.value,
+    });
   }
+  filterChats = (chats) => {
+    const { searchValue } = this.state;
 
-
+    return chats
+      .filter(chat => chat.title
+        .toLowerCase()
+        .includes(searchValue.toLowerCase())
+      )
+      .sort((one, two) =>
+        one.title.toLowerCase() <= two.title.toLowerCase() ? -1 : 1
+      );
+  };
   render() {
     const {
       classes, logout, chats, activeUser,
@@ -120,11 +132,10 @@ class MainPage extends Component {
       messages, editUser
     } = this.props;
 
-
     return (
       <div className={classes.grid}>
         <div className={classes.headerContainer}>
-          <DrawerHeader addChat={createChat}/>
+          <DrawerHeader addChat={createChat} searchValue={this.state.searchValue} handleChange={this.handleSearchChange}/>
           <ChatAppBar logout={logout}
                       editUser={editUser}
                       activeUser={activeUser}
@@ -136,9 +147,9 @@ class MainPage extends Component {
 
         <div className={classes.contentContainer}>
           <ChatList
-            chats={this.state.activeTab === 0 ? chats.my : chats.all}
+            chats={this.filterChats(this.state.activeTab === 0 ? chats.my : chats.all)}
             activeChat={chats.active}/>
-          <Chat messages={messages}/>
+          <Chat messages={messages} activeUser={activeUser} activeChat={chats.active}/>
         </div>
 
         <div className={classes.footerContainer}>
@@ -146,8 +157,7 @@ class MainPage extends Component {
           <BottomNavigation
             value={this.state.activeTab}
             onChange={this.handleTabChange}
-            showLabels
-          >
+            showLabels>
             <BottomNavigationAction label="My Chats" icon={<RestoreIcon />} />
             <BottomNavigationAction label="Explore" icon={<ExploreIcon />} />
           </BottomNavigation>
