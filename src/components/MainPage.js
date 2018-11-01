@@ -21,6 +21,7 @@ import ChatList from './ChatList';
 import DrawerHeader from './DrawerHeader';
 import ChatAppBar from './AppBar';
 import Chat from './Chat';
+import ErrorMessage from './ErrorMessage'
 import MessageInput from './MessageInput';
 
 
@@ -137,14 +138,15 @@ class MainPage extends Component {
     const {
       classes, logout, chats, activeUser,
       createChat, joinChat, leaveChat, deleteChat, sendMessage,
-      messages, editUser
+      messages, editUser, error, isConnected
     } = this.props;
 
     return (
       <div className={classes.grid}>
         <div className={classes.headerContainer}>
-          <DrawerHeader addChat={createChat} searchValue={this.state.searchValue} handleChange={this.handleSearchChange}/>
+          <DrawerHeader isConnected={isConnected} addChat={createChat} searchValue={this.state.searchValue} handleChange={this.handleSearchChange}/>
           <ChatAppBar logout={logout}
+                      isConnected={isConnected}
                       editUser={editUser}
                       activeUser={activeUser}
                       activeChat={chats.active}
@@ -155,6 +157,7 @@ class MainPage extends Component {
 
         <div className={classes.contentContainer}>
           <ChatList
+            disabled={!isConnected}
             chats={this.filterChats(this.state.activeTab === 0 ? chats.my : chats.all)}
             activeChat={chats.active}/>
           <Chat messages={messages} activeUser={activeUser} activeChat={chats.active}/>
@@ -171,12 +174,14 @@ class MainPage extends Component {
           </BottomNavigation>
 
           {chats.active && <MessageInput
+            disabled={!isConnected}
             sendMessage={sendMessage}
             showJoinButton={!activeUser.isChatMember}
             onJoinButtonClick={() => joinChat(chats.active._id)}
             activeUser={activeUser}
           />}
         </div>
+        <ErrorMessage error={error}/>
       </div>
     );
   }
@@ -200,6 +205,8 @@ const mapStateToProps = state => {
       isChatMember: fromState.isChatMember(state, activeChat),
     },
     messages: state.messages,
+    error: state.services.errors.chat,
+    isConnected: state.services.isConnected,
   };
 };
 

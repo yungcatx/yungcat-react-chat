@@ -5,15 +5,21 @@ import redirect from './services';
 export function missingSocketConnection(){
   return {
     type: types.SOCKET_MISSING_CONNECTION,
+    payload: new Error('Missing socket connection')
   }
 }
 
-let socket = null
+let socket = null;
 
 export function socketsConnect() {
   return (dispatch, getState) => {
-    const {token} = getState().auth;
+    const state = getState();
+    const {token} = state.auth;
+    const {isFetching} = state.services;
 
+    if (isFetching.sockets) {
+      return Promise.resolve()
+    }
     dispatch({
       type:types.SOCKET_CONNECTION_REQUEST
     });
@@ -28,15 +34,17 @@ export function socketsConnect() {
       })
     });
 
-    socket.on('error', () => {
+    socket.on('error', (error) => {
       dispatch({
-        type: types.SOCKET_CONNECTION_FAILURE
+        type: types.SOCKET_CONNECTION_FAILURE,
+        payload: new Error(`Connection: ${error}`)
       })
     });
 
     socket.on('connect_error', () => {
       dispatch({
-        type: types.SOCKET_CONNECTION_FAILURE
+        type: types.SOCKET_CONNECTION_FAILURE,
+        payload: new Error('We have lost the connection >.<')
       })
     });
 

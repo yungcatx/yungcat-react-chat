@@ -26,7 +26,7 @@ const styles = theme => ({
 
 });
 
-const ChatAppBar = ({classes, logout, activeChat, activeUser, editUser, leaveChat, deleteChat}) => (
+const ChatAppBar = ({classes, logout, activeChat, activeUser, editUser, leaveChat, deleteChat, isConnected}) => (
   <div className={classes.appBarContainer}>
   <AppBar position="absolute" className={classes.appBar}>
     <Toolbar className={classes.toolBarLayout}>
@@ -38,6 +38,7 @@ const ChatAppBar = ({classes, logout, activeChat, activeUser, editUser, leaveCha
           <Typography variant="title" color="inherit">
             {activeChat.title}
             <ChatMenu
+              disabled={!isConnected}
               activeUser={activeUser}
               onLeaveClick={() => leaveChat(activeChat._id)}
               onDeleteClick={() => deleteChat(activeChat._id)}
@@ -49,6 +50,7 @@ const ChatAppBar = ({classes, logout, activeChat, activeUser, editUser, leaveCha
         </Typography>
         )}
       <UserMenu
+        disabled={!isConnected}
         logout={logout}
         editUser={editUser}
         activeUser={activeUser}

@@ -33,7 +33,7 @@ class SimpleMenu extends React.Component {
 
   render() {
     const { anchorEl } = this.state;
-    const {classes, logout, editUser, activeUser} = this.props;
+    const {classes, logout, editUser, activeUser, disabled} = this.props;
 
     return (
       <div className={classes.menuItem}>
@@ -42,6 +42,7 @@ class SimpleMenu extends React.Component {
           aria-haspopup="true"
           onClick={this.handleClick}
           color="inherit"
+          disabled={disabled}
         >
           <ProfileIcon/>
         </IconButton>

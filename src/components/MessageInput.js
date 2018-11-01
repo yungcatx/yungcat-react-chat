@@ -37,7 +37,7 @@ class MessageInput extends React.Component {
   }
 
   render() {
-    const { classes, showJoinButton, onJoinButtonClick } = this.props;
+    const { classes, showJoinButton, onJoinButtonClick, disabled } = this.props;
 
     return (
       <div className={classes.messageInputWrapper}>
@@ -47,6 +47,7 @@ class MessageInput extends React.Component {
               fullWidth
               variant="raised"
               color="primary"
+              disabled={disabled}
               onClick={onJoinButtonClick}
             >
               Join
@@ -55,6 +56,7 @@ class MessageInput extends React.Component {
             <Input
               fullWidth
               placeholder="Type your message…"
+              disabled={disabled}
               value={this.state.value}
               onChange={this.handleValueChange}
               onKeyPress={this.handleKeyPress}

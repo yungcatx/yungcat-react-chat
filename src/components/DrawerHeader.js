@@ -23,7 +23,7 @@ const styles = theme => ({
 class DrawerHeader extends React.Component {
 
   render () {
-    const {classes, addChat, searchValue, handleChange} = this.props;
+    const {classes, addChat, searchValue, handleChange, isConnected} = this.props;
     return (
       <div className={classes.drawerContainer}>
         <div className={classes.drawerHeader}>
@@ -34,7 +34,7 @@ class DrawerHeader extends React.Component {
             value={searchValue}
             onChange={handleChange}
           />
-          <AddChatButton onSubmit={addChat}/>
+          <AddChatButton disabled={!isConnected} onSubmit={addChat}/>
           <Divider/>
         </div>
       </div>
