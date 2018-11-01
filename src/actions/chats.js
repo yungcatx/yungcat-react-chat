@@ -1,5 +1,4 @@
 import * as types from '../constants/chats'
-import * as message_types from '../constants/messages'
 import callApi from '../utils/call-api'
 import redirect from './services'
 
@@ -203,26 +202,5 @@ export function deleteChat(chatId) {
   }
 }
 
-export function sendMessage(chatId, content) {
-  return (dispatch, getState) => {
-    const {token} = getState().auth;
 
-    dispatch({
-      type: message_types.SEND_MESSAGE_REQUEST,
-      payload: {chatId, content}
-    });
-    return callApi(`chats/${chatId}`, token, {method: 'POST'}, {'data': {content}})
-      .then(data => {
-        dispatch({
-          type: message_types.SEND_MESSAGE_SUCCESS,
-          payload: data
-        });
 
-        dispatch(fetchChat(chatId))
-      })
-      .catch(reason => dispatch({
-        type: message_types.SEND_MESSAGE_FAILURE,
-        payload: reason
-      }));
-  }
-}

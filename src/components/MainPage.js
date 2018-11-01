@@ -13,8 +13,8 @@ import {
   fetchAllChats, fetchMyChats, setActiveChat,
   logout, createChat, editUser,
   deleteChat, joinChat, leaveChat,
-  sendMessage
 } from "../actions";
+import {sendMessage, mountChat, unmountChat, socketsConnect} from "../actions/sockets";
 import * as fromChats from '../reducers/chats';
 import * as fromState from '../reducers';
 import ChatList from './ChatList';
@@ -83,24 +83,32 @@ class MainPage extends Component {
 
   };
   componentDidMount() {
-    const {match, fetchAllChats, fetchMyChats, setActiveChat} = this.props;
+    const {match, fetchAllChats, fetchMyChats, setActiveChat, socketsConnect, mountChat} = this.props;
     console.log('state', this.state.activeTab)
     Promise.all([
       fetchAllChats(),
       fetchMyChats(),
     ])
       .then(() => {
-        if (match.params.chatId) {
-          setActiveChat(match.params.chatId);
+        socketsConnect();
+      })
+      .then(() => {
+        const{ chatId } = match.params;
+
+        if (chatId) {
+          setActiveChat(chatId);
+          mountChat(chatId)
         }
       })
   };
   componentWillReceiveProps(nextProps) {
-    const {match: {params}, setActiveChat} = this.props;
+    const {match: {params}, setActiveChat, mountChat, unmountChat} = this.props;
     const {params: nextParams} = nextProps.match;
 
     if (nextParams.chatId && params.chatId !== nextParams.chatId) {
       setActiveChat(nextParams.chatId);
+      unmountChat(params.chatId);
+      mountChat(nextParams.chatId);
     }
   };
   handleTabChange = (event, value) => {
@@ -163,7 +171,7 @@ class MainPage extends Component {
           </BottomNavigation>
 
           {chats.active && <MessageInput
-            sendMessage={(content) => sendMessage(chats.active._id, content)}
+            sendMessage={sendMessage}
             showJoinButton={!activeUser.isChatMember}
             onJoinButtonClick={() => joinChat(chats.active._id)}
             activeUser={activeUser}
@@ -205,8 +213,11 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   deleteChat,
   joinChat,
   leaveChat,
-  sendMessage,
   editUser,
+  socketsConnect,
+  sendMessage,
+  mountChat,
+  unmountChat
 }, dispatch);
 
 export default compose(
