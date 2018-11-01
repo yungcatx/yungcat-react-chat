@@ -13,14 +13,15 @@ import {
   fetchAllChats, fetchMyChats, setActiveChat,
   logout, createChat, editUser,
   deleteChat, joinChat, leaveChat,
-  sendMessage
 } from "../actions";
+import {sendMessage, mountChat, unmountChat, socketsConnect} from "../actions/sockets";
 import * as fromChats from '../reducers/chats';
 import * as fromState from '../reducers';
 import ChatList from './ChatList';
 import DrawerHeader from './DrawerHeader';
 import ChatAppBar from './AppBar';
 import Chat from './Chat';
+import ErrorMessage from './ErrorMessage'
 import MessageInput from './MessageInput';
 
 
@@ -83,24 +84,32 @@ class MainPage extends Component {
 
   };
   componentDidMount() {
-    const {match, fetchAllChats, fetchMyChats, setActiveChat} = this.props;
+    const {match, fetchAllChats, fetchMyChats, setActiveChat, socketsConnect, mountChat} = this.props;
     console.log('state', this.state.activeTab)
     Promise.all([
       fetchAllChats(),
       fetchMyChats(),
     ])
       .then(() => {
-        if (match.params.chatId) {
-          setActiveChat(match.params.chatId);
+        socketsConnect();
+      })
+      .then(() => {
+        const{ chatId } = match.params;
+
+        if (chatId) {
+          setActiveChat(chatId);
+          mountChat(chatId)
         }
       })
   };
   componentWillReceiveProps(nextProps) {
-    const {match: {params}, setActiveChat} = this.props;
+    const {match: {params}, setActiveChat, mountChat, unmountChat} = this.props;
     const {params: nextParams} = nextProps.match;
 
     if (nextParams.chatId && params.chatId !== nextParams.chatId) {
       setActiveChat(nextParams.chatId);
+      unmountChat(params.chatId);
+      mountChat(nextParams.chatId);
     }
   };
   handleTabChange = (event, value) => {
@@ -129,14 +138,15 @@ class MainPage extends Component {
     const {
       classes, logout, chats, activeUser,
       createChat, joinChat, leaveChat, deleteChat, sendMessage,
-      messages, editUser
+      messages, editUser, error, isConnected
     } = this.props;
 
     return (
       <div className={classes.grid}>
         <div className={classes.headerContainer}>
-          <DrawerHeader addChat={createChat} searchValue={this.state.searchValue} handleChange={this.handleSearchChange}/>
+          <DrawerHeader isConnected={isConnected} addChat={createChat} searchValue={this.state.searchValue} handleChange={this.handleSearchChange}/>
           <ChatAppBar logout={logout}
+                      isConnected={isConnected}
                       editUser={editUser}
                       activeUser={activeUser}
                       activeChat={chats.active}
@@ -147,6 +157,7 @@ class MainPage extends Component {
 
         <div className={classes.contentContainer}>
           <ChatList
+            disabled={!isConnected}
             chats={this.filterChats(this.state.activeTab === 0 ? chats.my : chats.all)}
             activeChat={chats.active}/>
           <Chat messages={messages} activeUser={activeUser} activeChat={chats.active}/>
@@ -163,12 +174,14 @@ class MainPage extends Component {
           </BottomNavigation>
 
           {chats.active && <MessageInput
-            sendMessage={(content) => sendMessage(chats.active._id, content)}
+            disabled={!isConnected}
+            sendMessage={sendMessage}
             showJoinButton={!activeUser.isChatMember}
             onJoinButtonClick={() => joinChat(chats.active._id)}
             activeUser={activeUser}
           />}
         </div>
+        <ErrorMessage error={error}/>
       </div>
     );
   }
@@ -192,6 +205,8 @@ const mapStateToProps = state => {
       isChatMember: fromState.isChatMember(state, activeChat),
     },
     messages: state.messages,
+    error: state.services.errors.chat,
+    isConnected: state.services.isConnected,
   };
 };
 
@@ -205,8 +220,11 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   deleteChat,
   joinChat,
   leaveChat,
-  sendMessage,
   editUser,
+  socketsConnect,
+  sendMessage,
+  mountChat,
+  unmountChat
 }, dispatch);
 
 export default compose(

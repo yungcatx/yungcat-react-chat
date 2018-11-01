@@ -8,6 +8,7 @@ import LoginForm from './LoginForm'
 import {bindActionCreators, compose} from "redux";
 import {login, signUp, receiveAuth} from "../actions";
 import connect from "react-redux/es/connect/connect";
+import ErrorMessage from "./ErrorMessage";
 
 
 const styles = theme => ({
@@ -67,7 +68,7 @@ class AuthPage extends React.Component {
   }
 
   render() {
-    const {classes, signUp, login, isAuthenticated} = this.props;
+    const {classes, signUp, login, isAuthenticated, error} = this.props;
     if (isAuthenticated) {
       return (
         <Redirect to="/chat"/>
@@ -90,6 +91,7 @@ class AuthPage extends React.Component {
             <div className={classes.signInFormContainer}>
               <LoginForm onSubmit={login}/>
             </div>
+            <ErrorMessage error={error}/>
           </div>
         </div>
       </div>
@@ -98,7 +100,8 @@ class AuthPage extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated
+  isAuthenticated: state.auth.isAuthenticated,
+  error: state.services.errors.auth
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

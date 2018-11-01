@@ -58,10 +58,11 @@ class AddChatButton extends React.Component {
 
   render() {
     const {chat} = this.state;
+    const {disabled} = this.props;
 
     return(
       <div>
-        <IconButton color="primary" onClick={this.handleClickOpen}>
+        <IconButton color="primary" disabled={disabled} onClick={this.handleClickOpen}>
           <AddIcon />
         </IconButton>
           <Dialog

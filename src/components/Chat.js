@@ -7,10 +7,9 @@ import ChatMessage from './ChatMessage'
 
 const styles = theme => ({
   chatLayoutContainer: {
-    overflowX: 'scroll',
-    height: '100%',
-    width: '100%',
+    overflowX: 'auto',
     paddingTop: theme.spacing.unit * 3,
+    position: 'relative',
     paddingBottom: '120px',
   },
   paperRoot: {

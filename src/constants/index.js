@@ -4,4 +4,5 @@ export * from './users';
 export * from './chats';
 export * from './sockets'
 export * from './messages';
+export * from './sockets';
 
